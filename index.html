@@ -1,103 +1,1170 @@
+```html
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Виртуалды Шаңқобыз</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #1a1612;
-    color: #e5c158;
-    font-family: sans-serif;
-    user-select: none;
-    touch-action: none;
-  }
-  #pad {
-    width: 90vw;
-    height: 60vh;
-    border: 2px dashed #e5c158;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    text-align: center;
-    padding: 20px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Шаңқобыз — Виртуалды Үн Жүйесі (Kazakh Shanqobyz Physical Simulator)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            title: ['Cinzel', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            steppegold: '#D4AF37',
+            bronze: '#8C6239',
+            damask: '#1C1A19',
+            steel: '#9CA3AF',
+            emboss: '#2D2825'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Nomadic steppe aesthetic and tactile metal gradients */
+    body {
+      background: radial-gradient(circle at 50% 20%, #201b17 0%, #100d0b 70%, #080605 100%);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-x pan-y;
+      overflow-x: hidden;
+    }
+
+    .metal-reflection {
+      background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.5) 100%);
+    }
+
+    .wood-grain {
+      background-color: #15120e;
+      background-image: radial-gradient(#261d15 1px, transparent 1px), radial-gradient(#1e1710 1px, #15120e 1px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+
+    .glow-gold {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+    }
+
+    .glow-cyan {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Tactile buttons */
+    .btn-ornament {
+      background: linear-gradient(180deg, #2b231d 0%, #1c1612 100%);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      transition: all 0.15s ease;
+    }
+    .btn-ornament:active, .btn-ornament.active {
+      background: linear-gradient(180deg, #3d3025 0%, #2a2018 100%);
+      border-color: #f6d860;
+      transform: translateY(1px);
+      box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+    }
+  </style>
 </head>
-<body>
+<body class="text-amber-100/90 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-600/30">
 
-<div id="pad">Басу немесе шерту: Тілшені қағу<br>Жоғары/төмен жылжыту: Обертон (ауыз қуысы)</div>
+  <header class="w-full border-b border-amber-900/40 bg-black/40 backdrop-blur-md px-4 py-3 sm:px-8 z-30">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full border border-amber-500/50 flex items-center justify-center bg-amber-950/40 shadow-inner">
+          <svg class="w-6 h-6 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Kazakh Traditional "Qoshqar Myiz" Ornament outline -->
+            <path d="M12 2C9.5 2 7 3.5 7 6C7 8 8.5 9.5 10.5 9.5C11.5 9.5 12 9 12 8C12 7 11 6.5 10 6.5C8.8 6.5 8 5.7 8 4.7C8 3.8 9.5 3 11.5 3C15 3 16 6 16 8C16 11.5 12.5 14 12 15C11.5 14 8 11.5 8 8C8 6 9 3 12.5 3C14.5 3 16 3.8 16 4.7C16 5.7 15.2 6.5 14 6.5C13 6.5 12 7 12 8C12 9 12.5 9.5 13.5 9.5C15.5 9.5 17 8 17 6C17 3.5 14.5 2 12 2ZM12 16C12.5 17 14 19 14 20C14 21.1 13.1 22 12 22C10.9 22 10 21.1 10 20C10 19 11.5 17 12 16Z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-title tracking-wider text-amber-300 font-extrabold flex items-center gap-2">
+            ШАҢҚОБЫЗ <span class="text-xs px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-400/80 font-sans tracking-normal font-normal">WebAudio DSP</span>
+          </h1>
+          <p class="text-xs text-amber-200/50">Дәстүрлі қазақ шаңқобызының физикалық-акустикалық моделі</p>
+        </div>
+      </div>
 
-<script>
-let ctx = null;
-const baseFreq = 65.4; // C2 нотасы (шаңқобыздың негізгі бурдон тоны)
+      <!-- Quick status & Base Tone -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <div class="hidden sm:flex flex-col text-right">
+          <span class="text-[10px] uppercase tracking-widest text-amber-500/70">Негізгі көмей үні (Tone)</span>
+          <span id="currentNoteLabel" class="text-sm font-semibold text-amber-200 font-mono">D2 (73.4 Гц)</span>
+        </div>
+        <select id="baseNoteSelect" class="bg-amber-950/80 border border-amber-600/40 rounded-lg text-amber-200 text-xs px-3 py-1.5 focus:outline-none focus:border-amber-400 cursor-pointer">
+          <option value="55.0">A1 (55.0 Hz) - Қоңыр төмен</option>
+          <option value="65.4">C2 (65.4 Hz) - Терең көмей</option>
+          <option value="73.4" selected>D2 (73.4 Hz) - Классикалық</option>
+          <option value="82.4">E2 (82.4 Hz) - Жоғары жіңішке</option>
+          <option value="98.0">G2 (98.0 Hz) - Шымыр ашық</option>
+        </select>
+      </div>
+    </div>
+  </header>
 
-function initAudio() {
-  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-}
+  <main class="max-w-7xl mx-auto w-full p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start flex-1">
+    
+    <!-- Left Column: Visual Shanqobyz Canvas & Reed Spring Physics (7 cols) -->
+    <div class="lg:col-span-7 flex flex-col gap-4">
+      <div class="relative w-full rounded-2xl bg-[#14100c] border border-amber-800/40 shadow-2xl overflow-hidden wood-grain flex flex-col items-center justify-center p-3 select-none">
+        
+        <!-- Top canvas overlays for interaction hint -->
+        <div class="absolute top-4 left-4 z-10 flex flex-col gap-1 pointer-events-none">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-xs uppercase tracking-wider text-amber-300 font-semibold drop-shadow">Тілшені серпіңіз немесе түртіңіз</span>
+          </div>
+          <span class="text-[11px] text-amber-400/60 drop-shadow">Тышқанмен/саусақпен тарту • Тыныс (Space)</span>
+        </div>
 
-function pluck(yPercent) {
-  initAudio();
-  if (ctx.state === 'suspended') ctx.resume();
+        <!-- Overtone harmonic indicator HUD inside Canvas container -->
+        <div class="absolute top-4 right-4 z-10 text-right pointer-events-none">
+          <div id="activeHarmonicBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-black/60 border border-amber-500/40 text-amber-300 inline-block backdrop-blur">
+            Обертон: <span id="harmonicNum" class="text-emerald-300 font-bold">8-ші</span> (<span id="harmonicFreqText">587 Гц</span>)
+          </div>
+        </div>
 
-  const now = ctx.currentTime;
-  const duration = 2.2; // Тілшенің тербелу ұзақтығы
+        <!-- The Realistic Shanqobyz Canvas -->
+        <canvas id="shanqobyzCanvas" class="w-full h-[380px] sm:h-[460px] cursor-grab active:cursor-grabbing rounded-xl touch-none"></canvas>
 
-  // 1. Тілше дірілінің генераторы (бай гармоникалық ара тәрізді толқын)
-  const osc = ctx.createOscillator();
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(baseFreq, now);
+        <!-- Dynamic Pluck Trigger Action Bar -->
+        <div class="w-full pt-3 flex items-center justify-between gap-2 border-t border-amber-900/30 text-xs">
+          <div class="flex items-center gap-2">
+            <button id="pluckInBtn" class="btn-ornament px-3 py-2 rounded-lg text-amber-200 font-semibold flex items-center gap-1.5 shadow">
+              <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+              <span>Ішке қағу (Pull)</span>
+              <kbd class="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-amber-600/30">↓</kbd>
+            </button>
+            <button id="pluckOutBtn" class="btn-ornament px-3 py-2 rounded-lg text-amber-200 font-semibold flex items-center gap-1.5 shadow">
+              <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+              <span>Сыртқа қағу (Push)</span>
+              <kbd class="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-amber-600/30">↑</kbd>
+            </button>
+          </div>
 
-  // Тілшені қаққан кездегі жеңіл pitch-bend әсері
-  osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.1, now + 0.02);
-  osc.frequency.exponentialRampToValueAtTime(baseFreq, now + 0.15);
+          <button id="droneToggleBtn" class="btn-ornament px-3.5 py-2 rounded-lg text-amber-300 flex items-center gap-2">
+            <span id="droneLed" class="w-2 h-2 rounded-full bg-red-500/50"></span>
+            <span id="droneBtnText">Үздіксіз ырғақ (Drone)</span>
+          </button>
+        </div>
+      </div>
 
-  // 2. Ауыз қуысының резонансы (Bandpass фильтр - формант)
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.Q.value = 14; // Резонанс өткірлігі
+      <!-- Realtime Oral Cavity 2D Interactive Trackpad -->
+      <div class="rounded-xl bg-black/40 border border-amber-900/40 p-3 sm:p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between text-xs text-amber-300/80">
+          <span class="font-semibold flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3.996 3.996 0 015.642 0 1 1 0 001.414-1.415 5.996 5.996 0 00-8.471 0 1 1 0 000 1.415z"/></svg>
+            Ауыз қуысын баптау (Mouth Cavity & Vowel Trackpad)
+          </span>
+          <span class="text-amber-400/60 font-mono text-[11px]">Көлденең: F2 (Тембр) • Тік: F1 (Көмей кеңдігі)</span>
+        </div>
+        
+        <div id="mouthTrackpad" class="relative w-full h-32 rounded-lg bg-gradient-to-br from-[#1a1510] to-[#0c0a08] border border-amber-700/30 overflow-hidden cursor-crosshair touch-none select-none flex items-center justify-center">
+          <!-- Vowel Landmark points placed accurately on Formant space -->
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 15%; top: 75%;">Ұ [u]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 28%; top: 55%;">О [o]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 45%; top: 68%;">Ө [ø]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 50%; top: 20%;">А [a]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 70%; top: 40%;">Е [e]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 85%; top: 15%;">І [i]</div>
 
-  // Төменнен жоғарыға: 300 Гц - 2600 Гц арасындағы обертондар
-  const formantFreq = 300 + (1 - yPercent) * 2300;
-  filter.frequency.setValueAtTime(formantFreq, now);
+          <div id="mouthCursor" class="absolute w-7 h-7 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-amber-300 bg-amber-500/30 backdrop-blur pointer-events-none flex items-center justify-center shadow-lg transition-[transform] duration-75">
+            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+          </div>
 
-  // 3. Тілшенің өшу динамикасы (ADSR)
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(1.0, now + 0.005); // Шапшаң соққы (attack)
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+          <span class="text-[11px] text-amber-300/30 pointer-events-none font-serif tracking-wider">Осы жерді саусақпен немесе тышқанмен сырғытыңыз</span>
+        </div>
+      </div>
+    </div>
 
-  // Тізбекті қосу
-  osc.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
+    <!-- Right Column: Formant Vowel Controls, Breath, Tongue, and Spectrum (5 cols) -->
+    <div class="lg:col-span-5 flex flex-col gap-4">
+      
+      <!-- Audio Spectrum & Formant Scope Visualizer -->
+      <div class="rounded-2xl bg-[#14100c] border border-amber-800/40 p-4 shadow-xl">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            Спектрлік резонанс (Harmonic Spectrum)
+          </span>
+          <span id="audioContextStatus" class="text-[10px] font-mono text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">Audio Ready</span>
+        </div>
+        <canvas id="spectrumCanvas" class="w-full h-24 rounded-lg bg-black/60 border border-amber-950"></canvas>
+      </div>
 
-  osc.start(now);
-  osc.stop(now + duration);
-}
+      <!-- Quick Kazakh Vowel Resonance Keys -->
+      <div class="rounded-2xl bg-[#14100c] border border-amber-800/40 p-4 shadow-xl flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Қазақ көмей дауыстылары (Vowels)</span>
+          <span class="text-[10px] text-amber-500/70">Пернелер: [1] - [6]</span>
+        </div>
 
-const pad = document.getElementById('pad');
+        <div class="grid grid-cols-6 gap-1.5 sm:gap-2">
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="U">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Ұ</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">1</span>
+          </button>
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="O">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">О</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">2</span>
+          </button>
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="OE">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Ө</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">3</span>
+          </button>
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="A">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">А</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">4</span>
+          </button>
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="E">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Е</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">5</span>
+          </button>
+          <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="I">
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">І</span>
+            <span class="text-[10px] text-amber-400/50 font-mono">6</span>
+          </button>
+        </div>
+      </div>
 
-function handleInteraction(e) {
-  const rect = pad.getBoundingClientRect();
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  let y = (clientY - rect.top) / rect.height;
-  y = Math.max(0, Math.min(1, y));
-  pluck(y);
-}
+      <!-- Breath, Throat & Physical Dynamics Modulators -->
+      <div class="rounded-2xl bg-[#14100c] border border-amber-800/40 p-4 shadow-xl flex flex-col gap-4">
+        <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Артикуляция мен көмей тынысы</span>
+        
+        <!-- Breathing Spacebar Controller -->
+        <div class="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-amber-900/30">
+          <button id="breathBtn" class="flex-1 py-2.5 px-4 rounded-lg bg-gradient-to-r from-amber-950 to-amber-900 border border-amber-500/40 text-amber-200 font-semibold text-xs flex items-center justify-center gap-2 hover:border-amber-400 active:scale-[0.99] transition-transform">
+            <svg class="w-4 h-4 text-cyan-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <span>Тыныс алу / шығару (Breath)</span>
+            <kbd class="text-[10px] bg-black/50 px-2 py-0.5 rounded text-amber-300 border border-amber-600/30 font-mono">Space</kbd>
+          </button>
+          
+          <div class="flex flex-col items-center justify-center px-2">
+            <span class="text-[9px] uppercase tracking-wider text-amber-400/60">Көмей</span>
+            <span id="breathIntensity" class="text-xs font-bold text-amber-300 font-mono">0%</span>
+          </div>
+        </div>
 
-pad.addEventListener('pointerdown', handleInteraction);
-pad.addEventListener('pointermove', (e) => {
-  if (e.buttons === 1) handleInteraction(e);
-});
-</script>
+        <!-- Tongue Flutter (Tremolo) & Q Resonance Sliders -->
+        <div class="space-y-3 text-xs">
+          <div>
+            <div class="flex justify-between text-amber-200/80 mb-1">
+              <span>Тіл дірілі (Tongue Flutter / Tremolo)</span>
+              <span id="tremoloValText" class="font-mono text-amber-400">Өшірулі</span>
+            </div>
+            <input id="tremoloSlider" type="range" min="0" max="1" step="0.01" value="0" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-amber-200/80 mb-1">
+              <span>Металл қаттылығы мен жаңғырық (Bite / Q)</span>
+              <span id="qValText" class="font-mono text-amber-400">Орташа (Q: 18)</span>
+            </div>
+            <input id="qSlider" type="range" min="6" max="32" step="1" value="18" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-amber-200/80 mb-1">
+              <span>Тербелістің өшу уақыты (Decay Damping)</span>
+              <span id="decayValText" class="font-mono text-amber-400">3.2 сек</span>
+            </div>
+            <input id="decaySlider" type="range" min="1.0" max="6.0" step="0.1" value="3.2" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick playing guide accordion -->
+      <div class="rounded-xl border border-amber-900/30 bg-black/20 p-3 text-xs text-amber-200/70 space-y-1.5 leading-relaxed">
+        <p class="font-semibold text-amber-300">Қалай ойнайды?</p>
+        <p>1. <span class="text-amber-200 font-medium">Шерту:</span> Тілшені (тікенді) тышқанмен немесе саусақпен тартып жіберіңіз немесе <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Enter</kbd> / <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Space</kbd> басыңыз.</p>
+        <p>2. <span class="text-amber-200 font-medium">Әуен шығару:</span> Тілше дірілдеп тұрғанда <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">1-6</kbd> пернелерін басып немесе төмендегі ауыз шаршысында тышқанды қозғап дауысты дыбыстардың обертондарын айқындаңыз.</p>
+        <p>3. <span class="text-amber-200 font-medium">Тыныс алу:</span> Бос орын (Space) пернесін басып тұрғанда көмейден ауа тарту дыбысы қосылып, нағыз шамандық терең үн туады.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="w-full border-t border-amber-900/40 bg-black/50 py-3 px-4 text-center text-xs text-amber-200/40">
+    Қазақтың көне шаңқобыз аспабы • 100% Таза есептеуіш DSP синтезі (No Samples) • Web Audio API & HTML5 Canvas
+  </footer>
+
+  <script>
+    /*
+     * KAZAKH SHANQOBYZ PHYSICAL ACOUSTIC ENGINE
+     * 100% Pure mathematical modeling (no recorded audio files):
+     * - Fundamental Reed Oscillator with asymmetric rich harmonic waveform
+     * - Pluck Click / Metallic Impulse transient noise burst
+     * - Non-linear Chebyschev / Soft clipping saturation for genuine metal reed bite
+     * - Dual Vocal Tract Resonator (F1 & F2 Formant Bandpass Filters)
+     * - Dynamic Breath Air-Flow turbulent noise generator
+     * - Tremolo / Throat Flutter LFO
+     */
+    class ShanqobyzAcousticEngine {
+      constructor() {
+        this.ctx = null;
+        this.baseFrequency = 73.416; // D2 default
+        this.formant1Freq = 600;     // F1
+        this.formant2Freq = 1400;    // F2
+        this.formantQ = 18;
+        this.dampingTime = 3.2;
+        this.tremoloDepth = 0;
+        this.tremoloRate = 6.5;
+
+        // Dynamic State
+        this.activePlucks = [];
+        this.isBreathing = false;
+        this.isDroneActive = false;
+        this.droneTimer = null;
+
+        // Breath Audio Nodes
+        this.breathGain = null;
+        this.breathFilter = null;
+        this.breathNoiseNode = null;
+      }
+
+      init() {
+        if (this.ctx) return;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioContextClass();
+
+        // Master output stage with gentle brickwall limiting
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
+
+        this.compressor = this.ctx.createDynamicsCompressor();
+        this.compressor.threshold.setValueAtTime(-12, this.ctx.currentTime);
+        this.compressor.knee.setValueAtTime(10, this.ctx.currentTime);
+        this.compressor.ratio.setValueAtTime(4, this.ctx.currentTime);
+        this.compressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
+        this.compressor.release.setValueAtTime(0.15, this.ctx.currentTime);
+
+        // Saturation Waveshaper (gives authentic metallic reed overdrive)
+        this.waveshaper = this.ctx.createWaveShaper();
+        this.waveshaper.curve = this.makeDistortionCurve(18);
+        this.waveshaper.oversample = '4x';
+
+        // Connect master chain
+        this.waveshaper.connect(this.compressor);
+        this.compressor.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+
+        // Initialize background breath noise pipeline
+        this.setupBreathPipeline();
+
+        // Analyzer for spectrum HUD
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = 512;
+        this.analyser.smoothingTimeConstant = 0.8;
+        this.masterGain.connect(this.analyser);
+      }
+
+      // Generate soft saturation curve simulating spring steel distortion
+      makeDistortionCurve(amount = 20) {
+        const k = typeof amount === 'number' ? amount : 20;
+        const n_samples = 44100;
+        const curve = new Float32Array(n_samples);
+        const deg = Math.PI / 180;
+        for (let i = 0; i < n_samples; ++i) {
+          const x = (i * 2) / n_samples - 1;
+          // Asymmetric transfer function mimicking reed hitting oral airflow
+          curve[i] = ( (3 + k) * x * 20 * deg ) / (Math.PI + k * Math.abs(x));
+        }
+        return curve;
+      }
+
+      // Breath noise model
+      setupBreathPipeline() {
+        const bufferSize = this.ctx.sampleRate * 2;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+
+        // Pink/Filtered noise for air breath turbulence
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99765 * b0 + white * 0.0555179;
+          b1 = 0.96300 * b1 + white * 0.0750759;
+          b2 = 0.57000 * b2 + white * 0.1538520;
+          output[i] = (b0 + b1 + b2) * 0.35;
+        }
+
+        this.breathNoiseNode = this.ctx.createBufferSource();
+        this.breathNoiseNode.buffer = noiseBuffer;
+        this.breathNoiseNode.loop = true;
+
+        this.breathFilter = this.ctx.createBiquadFilter();
+        this.breathFilter.type = 'bandpass';
+        this.breathFilter.frequency.setValueAtTime(this.formant1Freq, this.ctx.currentTime);
+        this.breathFilter.Q.setValueAtTime(3.5, this.ctx.currentTime);
+
+        this.breathGain = this.ctx.createGain();
+        this.breathGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+
+        this.breathNoiseNode.connect(this.breathFilter);
+        this.breathFilter.connect(this.breathGain);
+        this.breathGain.connect(this.waveshaper);
+        this.breathNoiseNode.start();
+      }
+
+      setBreath(active) {
+        if (!this.ctx) this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.isBreathing = active;
+        const now = this.ctx.currentTime;
+        if (active) {
+          this.breathGain.gain.cancelScheduledValues(now);
+          this.breathGain.gain.linearRampToValueAtTime(0.28, now + 0.1);
+        } else {
+          this.breathGain.gain.cancelScheduledValues(now);
+          this.breathGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+        }
+      }
+
+      setFormants(f1, f2) {
+        this.formant1Freq = f1;
+        this.formant2Freq = f2;
+        const now = this.ctx ? this.ctx.currentTime : 0;
+        
+        if (this.breathFilter && this.ctx) {
+          this.breathFilter.frequency.setTargetAtTime(f1, now, 0.04);
+        }
+
+        // Dynamically update currently ringing plucks
+        for (const pluck of this.activePlucks) {
+          if (pluck.filter1 && pluck.filter2) {
+            pluck.filter1.frequency.setTargetAtTime(f1, now, 0.04);
+            pluck.filter2.frequency.setTargetAtTime(f2, now, 0.04);
+          }
+        }
+      }
+
+      /*
+       * Trigger a realistic pluck stroke:
+       * @param {number} velocity Pluck strength (0.3 to 1.5)
+       * @param {string} direction 'in' or 'out'
+       */
+      pluck(velocity = 1.0, direction = 'in') {
+        this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+
+        const now = this.ctx.currentTime;
+        const dur = this.dampingTime;
+        const base = this.baseFrequency;
+
+        // 1. Multi-Harmonic Reed Oscillator
+        // A real steel reed generates saw-like sharp teeth with subtle sub-harmonics
+        const reedOsc = this.ctx.createOscillator();
+        reedOsc.type = 'sawtooth';
+        reedOsc.frequency.setValueAtTime(base, now);
+
+        // Subtle initial pitch bend caused by momentary tension when finger snaps off
+        const detuneDir = direction === 'in' ? 1.0 : -1.0;
+        const initialDetune = base * 0.06 * detuneDir * velocity;
+        reedOsc.frequency.setValueAtTime(base + initialDetune, now);
+        reedOsc.frequency.exponentialRampToValueAtTime(base, now + 0.04);
+
+        // Secondary subtle square harmonic for hollow reed cavity feel
+        const subOsc = this.ctx.createOscillator();
+        subOsc.type = 'square';
+        subOsc.frequency.setValueAtTime(base * 2, now);
+
+        const subGain = this.ctx.createGain();
+        subGain.gain.setValueAtTime(0.22, now);
+        subOsc.connect(subGain);
+
+        // 2. Metallic Snap Impulse (Pluck click)
+        const clickOsc = this.ctx.createOscillator();
+        clickOsc.type = 'triangle';
+        clickOsc.frequency.setValueAtTime(1400 * (direction === 'in' ? 1.1 : 0.9), now);
+        clickOsc.frequency.exponentialRampToValueAtTime(80, now + 0.025);
+
+        const clickGain = this.ctx.createGain();
+        clickGain.gain.setValueAtTime(0.7 * velocity, now);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+        clickOsc.connect(clickGain);
+        clickOsc.start(now);
+        clickOsc.stop(now + 0.03);
+
+        // 3. Oral Cavity Dual Formants (F1, F2 bandpass filters)
+        const f1Filter = this.ctx.createBiquadFilter();
+        f1Filter.type = 'bandpass';
+        f1Filter.frequency.setValueAtTime(this.formant1Freq, now);
+        f1Filter.Q.setValueAtTime(this.formantQ, now);
+
+        const f2Filter = this.ctx.createBiquadFilter();
+        f2Filter.type = 'bandpass';
+        f2Filter.frequency.setValueAtTime(this.formant2Freq, now);
+        f2Filter.Q.setValueAtTime(this.formantQ * 1.15, now);
+
+        // High frequency damping filter (simulating natural metallic ring energy decay)
+        const dampFilter = this.ctx.createBiquadFilter();
+        dampFilter.type = 'lowpass';
+        dampFilter.frequency.setValueAtTime(4500, now);
+        dampFilter.frequency.exponentialRampToValueAtTime(1200, now + dur);
+
+        // 4. Amplitude Envelope (ADSR) with natural double-slope decay
+        const envGain = this.ctx.createGain();
+        envGain.gain.setValueAtTime(0.0001, now);
+        // Fast snap attack
+        envGain.gain.linearRampToValueAtTime(0.9 * velocity, now + 0.004);
+        // Initial ring punch
+        envGain.gain.exponentialRampToValueAtTime(0.4 * velocity, now + 0.12);
+        // Long natural vibrating tail
+        envGain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        // 5. Tongue Tremolo Modulation
+        if (this.tremoloDepth > 0) {
+          const lfo = this.ctx.createOscillator();
+          lfo.frequency.setValueAtTime(this.tremoloRate, now);
+          const lfoGain = this.ctx.createGain();
+          lfoGain.gain.setValueAtTime(this.tremoloDepth * 0.35, now);
+          lfo.connect(lfoGain.gain);
+          lfo.start(now);
+          lfo.stop(now + dur);
+        }
+
+        // Routing connections
+        reedOsc.connect(dampFilter);
+        subGain.connect(dampFilter);
+
+        // Split to dual formants
+        dampFilter.connect(f1Filter);
+        dampFilter.connect(f2Filter);
+
+        f1Filter.connect(envGain);
+        f2Filter.connect(envGain);
+        clickGain.connect(envGain);
+
+        envGain.connect(this.waveshaper);
+
+        reedOsc.start(now);
+        subOsc.start(now);
+        reedOsc.stop(now + dur + 0.05);
+        subOsc.stop(now + dur + 0.05);
+
+        // Keep track of active plucks
+        const pluckRecord = { filter1: f1Filter, filter2: f2Filter, endTime: now + dur };
+        this.activePlucks.push(pluckRecord);
+
+        // Cleanup
+        setTimeout(() => {
+          const idx = this.activePlucks.indexOf(pluckRecord);
+          if (idx !== -1) this.activePlucks.splice(idx, 1);
+        }, (dur + 0.1) * 1000);
+      }
+
+      // Drone Loop (repeating rhythmic pluck like traditional epic performers)
+      toggleDrone(callback) {
+        this.isDroneActive = !this.isDroneActive;
+        if (this.isDroneActive) {
+          let step = 0;
+          const playStep = () => {
+            if (!this.isDroneActive) return;
+            const dir = step % 2 === 0 ? 'in' : 'out';
+            const vel = step % 4 === 0 ? 1.2 : 0.85;
+            this.pluck(vel, dir);
+            if (callback) callback(dir, vel);
+            step++;
+            this.droneTimer = setTimeout(playStep, 380); // ~158 BPM gallop rhythm
+          };
+          playStep();
+        } else {
+          clearTimeout(this.droneTimer);
+        }
+        return this.isDroneActive;
+      }
+    }
+
+    // Authentic formant maps for Kazakh vowels (F1: Throat openness, F2: Tongue front/back placement)
+    const VOWEL_MAP = {
+      'U':  { f1: 320,  f2: 780,  name: 'Ұ [u]' },
+      'O':  { f1: 480,  f2: 950,  name: 'О [o]' },
+      'OE': { f1: 420,  f2: 1550, name: 'Ө [ø]' },
+      'A':  { f1: 750,  f2: 1250, name: 'А [a]' },
+      'E':  { f1: 520,  f2: 1900, name: 'Е [e]' },
+      'I':  { f1: 340,  f2: 2300, name: 'І [i]' }
+    };
+
+    const engine = new ShanqobyzAcousticEngine();
+
+    const canvas = document.getElementById('shanqobyzCanvas');
+    const ctx2d = canvas.getContext('2d');
+
+    // Physical Spring for the Steel Reed (Тілше)
+    class ReedSpring {
+      constructor() {
+        this.displacement = 0;   // Current tip position offset
+        this.velocity = 0;       // Speed
+        this.targetDisplacement = 0;
+        this.stiffness = 0.12;   // Spring constant
+        this.damping = 0.94;     // Oscillation decay rate
+        this.isDragging = false;
+        this.dragStartY = 0;
+      }
+
+      triggerPluck(intensity = 40, direction = 'in') {
+        const sign = direction === 'in' ? 1 : -1;
+        this.velocity = sign * intensity;
+      }
+
+      update() {
+        if (!this.isDragging) {
+          const force = -this.stiffness * this.displacement;
+          this.velocity += force;
+          this.velocity *= this.damping;
+          this.displacement += this.velocity;
+        }
+      }
+    }
+
+    const reed = new ReedSpring();
+
+    // Resize Canvas adaptively
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx2d.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawShanqobyz() {
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx2d.clearRect(0, 0, w, h);
+
+      // Center reference
+      const cx = w * 0.42;
+      const cy = h * 0.5;
+      const scale = Math.min(w, h) / 380;
+
+      // Outer glow & drop shadow
+      ctx2d.save();
+      ctx2d.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx2d.shadowBlur = 24;
+      ctx2d.shadowOffsetY = 12;
+
+      // 1. FORGED STEEL FRAME (Шанақ - horseshoe frame and long tapered tines)
+      // Traditional shape: circular ring handle transitioning into two parallel arms
+      ctx2d.save();
+      ctx2d.lineWidth = 14 * scale;
+      ctx2d.lineCap = 'round';
+      ctx2d.lineJoin = 'round';
+
+      // Outer Horseshoe Frame
+      const frameGrad = ctx2d.createLinearGradient(cx - 120 * scale, cy - 80 * scale, cx + 180 * scale, cy + 80 * scale);
+      frameGrad.addColorStop(0, '#38322e');
+      frameGrad.addColorStop(0.2, '#7e756e');
+      frameGrad.addColorStop(0.45, '#c5bab0');
+      frameGrad.addColorStop(0.65, '#4a423d');
+      frameGrad.addColorStop(0.85, '#a3988f');
+      frameGrad.addColorStop(1, '#2c2623');
+      ctx2d.strokeStyle = frameGrad;
+
+      // Frame Path
+      ctx2d.beginPath();
+      // Upper tapered arm
+      ctx2d.moveTo(cx + 175 * scale, cy - 24 * scale);
+      ctx2d.lineTo(cx + 30 * scale, cy - 20 * scale);
+      // Bow / Ring loop (closed round head held by teeth/lips)
+      ctx2d.bezierCurveTo(cx - 40 * scale, cy - 70 * scale, cx - 110 * scale, cy - 65 * scale, cx - 125 * scale, cy);
+      ctx2d.bezierCurveTo(cx - 110 * scale, cy + 65 * scale, cx - 40 * scale, cy + 70 * scale, cx + 30 * scale, cy + 20 * scale);
+      // Lower tapered arm
+      ctx2d.lineTo(cx + 175 * scale, cy + 24 * scale);
+      ctx2d.stroke();
+      ctx2d.restore();
+
+      // Inner highlight for metallic forged depth
+      ctx2d.save();
+      ctx2d.lineWidth = 3.5 * scale;
+      ctx2d.strokeStyle = 'rgba(255, 245, 220, 0.4)';
+      ctx2d.beginPath();
+      ctx2d.moveTo(cx + 172 * scale, cy - 22 * scale);
+      ctx2d.lineTo(cx + 30 * scale, cy - 18 * scale);
+      ctx2d.bezierCurveTo(cx - 38 * scale, cy - 66 * scale, cx - 105 * scale, cy - 60 * scale, cx - 120 * scale, cy);
+      ctx2d.stroke();
+      ctx2d.restore();
+
+      // Traditional Kazak Ornaments carved onto the forged steel ring
+      ctx2d.save();
+      ctx2d.fillStyle = 'rgba(212, 175, 55, 0.65)';
+      ctx2d.font = `${Math.round(13 * scale)}px Cinzel, serif`;
+      ctx2d.textAlign = 'center';
+      ctx2d.fillText('◆  ҚАЗАҚ  ◆', cx - 72 * scale, cy + 4 * scale);
+      ctx2d.restore();
+
+      // 2. FLEXIBLE STEEL REED (ТІЛШЕ) WITH MOTION BLUR VIBRATION
+      const vib = reed.displacement * scale;
+      const speed = Math.abs(reed.velocity);
+
+      // Vibration motion blur lines when moving fast
+      if (speed > 1.5) {
+        ctx2d.save();
+        ctx2d.strokeStyle = `rgba(212, 175, 55, ${Math.min(0.4, speed * 0.03)})`;
+        ctx2d.lineWidth = 4 * scale;
+        for (let i = -2; i <= 2; i++) {
+          const ghostVib = vib + i * (speed * 0.4);
+          ctx2d.beginPath();
+          ctx2d.moveTo(cx - 115 * scale, cy);
+          ctx2d.bezierCurveTo(cx - 40 * scale, cy, cx + 90 * scale, cy + ghostVib * 0.4, cx + 185 * scale, cy + ghostVib);
+          ctx2d.stroke();
+        }
+        ctx2d.restore();
+      }
+
+      // Reed Base Anchor (welded to the back of the bow ring)
+      ctx2d.save();
+      ctx2d.fillStyle = '#b0a394';
+      ctx2d.beginPath();
+      ctx2d.arc(cx - 116 * scale, cy, 7 * scale, 0, Math.PI * 2);
+      ctx2d.fill();
+      ctx2d.restore();
+
+      // Main Steel Reed Blade
+      ctx2d.save();
+      const reedGrad = ctx2d.createLinearGradient(cx - 115 * scale, cy, cx + 210 * scale, cy);
+      reedGrad.addColorStop(0, '#595048');
+      reedGrad.addColorStop(0.3, '#d3c9be');
+      reedGrad.addColorStop(0.7, '#fff5ea');
+      reedGrad.addColorStop(1, '#8f8377');
+
+      ctx2d.strokeStyle = reedGrad;
+      ctx2d.lineWidth = 5 * scale;
+      ctx2d.lineCap = 'round';
+
+      ctx2d.beginPath();
+      ctx2d.moveTo(cx - 115 * scale, cy);
+      // Subtle bending curve along the reed length
+      ctx2d.bezierCurveTo(
+        cx - 20 * scale, cy + vib * 0.15,
+        cx + 80 * scale, cy + vib * 0.45,
+        cx + 185 * scale, cy + vib
+      );
+      ctx2d.stroke();
+
+      // Reed Tip Elbow (Шүйде / Тілшенің қайырылған ұшы)
+      // The bent right-angle elbow hook that players flick with fingers
+      const tipX = cx + 185 * scale;
+      const tipY = cy + vib;
+      const hookAngle = -Math.PI / 3.2;
+      const hookLen = 32 * scale;
+      const hookX = tipX + Math.cos(hookAngle) * hookLen;
+      const hookY = tipY + Math.sin(hookAngle) * hookLen;
+
+      ctx2d.lineWidth = 4 * scale;
+      ctx2d.beginPath();
+      ctx2d.moveTo(tipX, tipY);
+      ctx2d.lineTo(hookX, hookY);
+      // Small ball / loop at the very end of the hook
+      ctx2d.arc(hookX, hookY, 3.5 * scale, 0, Math.PI * 2);
+      ctx2d.stroke();
+
+      // Highlight knob on tip for touch target
+      ctx2d.fillStyle = '#fde68a';
+      ctx2d.shadowColor = '#f59e0b';
+      ctx2d.shadowBlur = 10;
+      ctx2d.beginPath();
+      ctx2d.arc(hookX, hookY, 5 * scale, 0, Math.PI * 2);
+      ctx2d.fill();
+
+      // Save hook coordinate for hit-testing
+      reed.tipScreenX = hookX;
+      reed.tipScreenY = hookY;
+      reed.tipRadius = 38 * scale; // Generous touch radius
+
+      ctx2d.restore();
+      ctx2d.restore(); // end shadow
+
+      // 3. Oral Sound Wave Ripples radiating from the harp center
+      if (speed > 0.8) {
+        ctx2d.save();
+        const rippleR = ((Date.now() / 8) % 180) * scale;
+        const alpha = Math.max(0, 1 - rippleR / (180 * scale)) * 0.4;
+        ctx2d.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+        ctx2d.lineWidth = 1.5;
+        ctx2d.beginPath();
+        ctx2d.ellipse(cx + 80 * scale, cy, rippleR, rippleR * 0.55, 0, 0, Math.PI * 2);
+        ctx2d.stroke();
+        ctx2d.restore();
+      }
+    }
+
+    // Physics Animation Loop
+    function animationLoop() {
+      reed.update();
+      drawShanqobyz();
+      drawSpectrum();
+      requestAnimationFrame(animationLoop);
+    }
+
+    const specCanvas = document.getElementById('spectrumCanvas');
+    const specCtx = specCanvas.getContext('2d');
+
+    function drawSpectrum() {
+      const sw = specCanvas.width = specCanvas.offsetWidth;
+      const sh = specCanvas.height = specCanvas.offsetHeight;
+
+      specCtx.fillStyle = '#0a0807';
+      specCtx.fillRect(0, 0, sw, sh);
+
+      if (!engine.analyser) {
+        // Flat idle line
+        specCtx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+        specCtx.beginPath();
+        specCtx.moveTo(0, sh / 2);
+        specCtx.lineTo(sw, sh / 2);
+        specCtx.stroke();
+        return;
+      }
+
+      const bufferLength = engine.analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      engine.analyser.getByteFrequencyData(dataArray);
+
+      // Draw spectral bars
+      const barWidth = (sw / bufferLength) * 2.5;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (dataArray[i] / 255) * (sh - 6);
+        
+        // Gradient color from amber to brilliant gold
+        const r = 212;
+        const g = Math.floor(140 + (dataArray[i] / 255) * 80);
+        const b = 55;
+        specCtx.fillStyle = `rgb(${r},${g},${b})`;
+        specCtx.fillRect(x, sh - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+        if (x > sw) break;
+      }
+
+      // Draw formant marker overlays
+      if (engine.formant1Freq && engine.formant2Freq) {
+        specCtx.fillStyle = '#38bdf8';
+        specCtx.font = '10px monospace';
+        const f1X = (engine.formant1Freq / (engine.ctx.sampleRate / 4)) * sw * 4;
+        const f2X = (engine.formant2Freq / (engine.ctx.sampleRate / 4)) * sw * 4;
+        if (f1X < sw) specCtx.fillText('F1', Math.max(4, f1X), 14);
+        if (f2X < sw) specCtx.fillText('F2', Math.min(sw - 16, f2X), 14);
+      }
+    }
+
+    let isInteracting = false;
+    let dragOriginY = 0;
+
+    function getCanvasCoords(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    // Check if touch/click is near the hook or anywhere on the vibrating reed
+    function hitTestTip(x, y) {
+      const dx = x - reed.tipScreenX;
+      const dy = y - reed.tipScreenY;
+      return Math.sqrt(dx * dx + dy * dy) <= (reed.tipRadius || 40);
+    }
+
+    function onPointerDown(e) {
+      const pos = getCanvasCoords(e);
+      isInteracting = true;
+      dragOriginY = pos.y;
+
+      if (hitTestTip(pos.x, pos.y)) {
+        reed.isDragging = true;
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!isInteracting) return;
+      const pos = getCanvasCoords(e);
+
+      if (reed.isDragging) {
+        // Drag reed tip visually with finger
+        const dy = pos.y - dragOriginY;
+        reed.displacement = Math.max(-55, Math.min(55, dy));
+      }
+    }
+
+    function onPointerUp(e) {
+      if (!isInteracting) return;
+      const pos = getCanvasCoords(e);
+
+      if (reed.isDragging) {
+        // Snap release!
+        reed.isDragging = false;
+        const delta = pos.y - dragOriginY;
+        const force = Math.max(0.4, Math.min(1.8, Math.abs(delta) / 20 || 1.0));
+        const direction = delta >= 0 ? 'in' : 'out';
+        
+        reed.triggerPluck(42 * force, direction);
+        engine.pluck(force, direction);
+      } else {
+        // Direct tap to flick
+        const direction = pos.y > reed.tipScreenY ? 'in' : 'out';
+        reed.triggerPluck(38, direction);
+        engine.pluck(1.0, direction);
+      }
+
+      isInteracting = false;
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+    window.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('touchend', onPointerUp);
+
+    const trackpad = document.getElementById('mouthTrackpad');
+    const mouthCursor = document.getElementById('mouthCursor');
+    const harmonicBadge = document.getElementById('activeHarmonicBadge');
+    const harmonicNumText = document.getElementById('harmonicNum');
+    const harmonicFreqText = document.getElementById('harmonicFreqText');
+
+    let isTrackingMouth = false;
+
+    function updateMouthFromCoords(normX, normY) {
+      // Constrain 0..1
+      const x = Math.max(0, Math.min(1, normX));
+      const y = Math.max(0, Math.min(1, normY));
+
+      // Visual cursor position
+      mouthCursor.style.left = `${x * 100}%`;
+      mouthCursor.style.top = `${y * 100}%`;
+
+      // Map X to F2 (Frontness: 700 Hz to 2400 Hz)
+      // Map Y to F1 (Openness: Low Y is open mouth 850 Hz, High Y is closed mouth 280 Hz)
+      const f1 = 280 + (1 - y) * 580;
+      const f2 = 700 + x * 1700;
+
+      engine.setFormants(f1, f2);
+
+      // Calculate nearest natural harmonic of base frequency
+      const base = engine.baseFrequency;
+      const nearestHarmonicOrder = Math.round(f2 / base);
+      const harmonicFreq = Math.round(nearestHarmonicOrder * base);
+      
+      harmonicNumText.innerText = `${nearestHarmonicOrder}-ші`;
+      harmonicFreqText.innerText = `${harmonicFreq} Гц`;
+    }
+
+    function handleTrackpadMove(e) {
+      const rect = trackpad.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const normX = (clientX - rect.left) / rect.width;
+      const normY = (clientY - rect.top) / rect.height;
+      updateMouthFromCoords(normX, normY);
+    }
+
+    trackpad.addEventListener('mousedown', (e) => {
+      isTrackingMouth = true;
+      handleTrackpadMove(e);
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (isTrackingMouth) handleTrackpadMove(e);
+    });
+    window.addEventListener('mouseup', () => { isTrackingMouth = false; });
+
+    trackpad.addEventListener('touchstart', (e) => {
+      isTrackingMouth = true;
+      handleTrackpadMove(e);
+    }, { passive: false });
+    trackpad.addEventListener('touchmove', (e) => {
+      if (isTrackingMouth) handleTrackpadMove(e);
+    }, { passive: false });
+    trackpad.addEventListener('touchend', () => { isTrackingMouth = false; });
+
+    // Vowel Quick Buttons
+    document.querySelectorAll('.vowel-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.vowel-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const vowelKey = btn.dataset.vowel;
+        const config = VOWEL_MAP[vowelKey];
+        if (config) {
+          // Normalize back to trackpad coordinates
+          const normX = (config.f2 - 700) / 1700;
+          const normY = 1 - (config.f1 - 280) / 580;
+          updateMouthFromCoords(normX, normY);
+        }
+      });
+    });
+
+    const breathBtn = document.getElementById('breathBtn');
+    const breathIntensity = document.getElementById('breathIntensity');
+
+    function setBreathingState(active) {
+      engine.setBreath(active);
+      if (active) {
+        breathBtn.classList.add('glow-cyan', 'border-cyan-400');
+        breathIntensity.innerText = '100%';
+        breathIntensity.classList.add('text-cyan-400');
+      } else {
+        breathBtn.classList.remove('glow-cyan', 'border-cyan-400');
+        breathIntensity.innerText = '0%';
+        breathIntensity.classList.remove('text-cyan-400');
+      }
+    }
+
+    breathBtn.addEventListener('mousedown', () => setBreathingState(true));
+    window.addEventListener('mouseup', () => {
+      if (engine.isBreathing) setBreathingState(false);
+    });
+    breathBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      setBreathingState(true);
+    });
+    window.addEventListener('touchend', () => {
+      if (engine.isBreathing) setBreathingState(false);
+    });
+
+    // Pluck Buttons
+    document.getElementById('pluckInBtn').addEventListener('click', () => {
+      reed.triggerPluck(38, 'in');
+      engine.pluck(1.0, 'in');
+    });
+
+    document.getElementById('pluckOutBtn').addEventListener('click', () => {
+      reed.triggerPluck(38, 'out');
+      engine.pluck(1.0, 'out');
+    });
+
+    // Continuous Folk Drone Mode
+    const droneBtn = document.getElementById('droneToggleBtn');
+    const droneLed = document.getElementById('droneLed');
+    droneBtn.addEventListener('click', () => {
+      const active = engine.toggleDrone((dir, vel) => {
+        reed.triggerPluck(32 * vel, dir);
+      });
+      if (active) {
+        droneBtn.classList.add('border-emerald-500', 'text-emerald-300');
+        droneLed.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+      } else {
+        droneBtn.classList.remove('border-emerald-500', 'text-emerald-300');
+        droneLed.className = 'w-2 h-2 rounded-full bg-red-500/50';
+      }
+    });
+
+    // Base Note Frequency selector
+    const baseNoteSelect = document.getElementById('baseNoteSelect');
+    const currentNoteLabel = document.getElementById('currentNoteLabel');
+    baseNoteSelect.addEventListener('change', (e) => {
+      const freq = parseFloat(e.target.value);
+      engine.baseFrequency = freq;
+      const text = e.target.options[e.target.selectedIndex].text.split(' - ')[0];
+      currentNoteLabel.innerText = text;
+      // Re-trigger visual pluck
+      reed.triggerPluck(30, 'in');
+      engine.pluck(0.9, 'in');
+    });
+
+    // Tongue Tremolo Slider
+    const tremoloSlider = document.getElementById('tremoloSlider');
+    const tremoloValText = document.getElementById('tremoloValText');
+    tremoloSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      engine.tremoloDepth = val;
+      if (val === 0) {
+        tremoloValText.innerText = 'Өшірулі';
+      } else {
+        tremoloValText.innerText = `${Math.round(val * 100)}% (${Math.round(engine.tremoloRate)} Гц)`;
+      }
+    });
+
+    // Resonance Q slider
+    const qSlider = document.getElementById('qSlider');
+    const qValText = document.getElementById('qValText');
+    qSlider.addEventListener('input', (e) => {
+      const q = parseFloat(e.target.value);
+      engine.formantQ = q;
+      qValText.innerText = `Q: ${q}`;
+    });
+
+    // Decay damping slider
+    const decaySlider = document.getElementById('decaySlider');
+    const decayValText = document.getElementById('decayValText');
+    decaySlider.addEventListener('input', (e) => {
+      const d = parseFloat(e.target.value);
+      engine.dampingTime = d;
+      decayValText.innerText = `${d.toFixed(1)} сек`;
+    });
+
+    window.addEventListener('keydown', (e) => {
+      // Prevent page scrolling on Space or Arrow keys
+      if (['Space', 'ArrowUp', 'ArrowDown'].includes(e.code)) {
+        e.preventDefault();
+      }
+
+      if (e.repeat) return;
+
+      // Spacebar: Breath in/out
+      if (e.code === 'Space') {
+        setBreathingState(true);
+        // Also gives subtle pluck if idle
+        if (Math.abs(reed.velocity) < 0.2) {
+          reed.triggerPluck(24, 'in');
+          engine.pluck(0.7, 'in');
+        }
+      }
+
+      // Enter or Down Arrow: Pluck inward
+      if (e.code === 'Enter' || e.code === 'ArrowDown') {
+        reed.triggerPluck(40, 'in');
+        engine.pluck(1.1, 'in');
+      }
+
+      // Up Arrow: Pluck outward
+      if (e.code === 'ArrowUp') {
+        reed.triggerPluck(40, 'out');
+        engine.pluck(1.1, 'out');
+      }
+
+      // Vowel number keys 1 to 6
+      const keyMap = { 'Digit1': 'U', 'Digit2': 'O', 'Digit3': 'OE', 'Digit4': 'A', 'Digit5': 'E', 'Digit6': 'I' };
+      if (keyMap[e.code]) {
+        const btn = document.querySelector(`.vowel-btn[data-vowel="${keyMap[e.code]}"]`);
+        if (btn) btn.click();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        setBreathingState(false);
+      }
+    });
+
+    // Initial default mouth setting: Vowel "О"
+    updateMouthFromCoords(0.28, 0.55);
+
+    // Start rendering loop on load
+    window.onload = function() {
+      resizeCanvas();
+      animationLoop();
+    };
+  </script>
 </body>
 </html>
+```
