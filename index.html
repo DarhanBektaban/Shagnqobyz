@@ -704,7 +704,7 @@
       ctx2d.fillStyle = 'rgba(212, 175, 55, 0.65)';
       ctx2d.font = `${Math.round(13 * scale)}px Cinzel, serif`;
       ctx2d.textAlign = 'center';
-      ctx2d.fillText('◆  ҚАЗАҚ  ◆', cx - 72 * scale, cy + 4 * scale);
+      ctx2d.fillText('◆  QAZAQ  ◆', cx - 72 * scale, cy + 4 * scale);
       ctx2d.restore();
 
       // 2. FLEXIBLE STEEL REED (TILSHE) WITH MOTION BLUR VIBRATION
@@ -965,8 +965,8 @@
       const nearestHarmonicOrder = Math.round(f2 / base);
       const harmonicFreq = Math.round(nearestHarmonicOrder * base);
       
-      harmonicNumText.innerText = `${nearestHarmonicOrder}-ші`;
-      harmonicFreqText.innerText = `${harmonicFreq} Гц`;
+      harmonicNumText.innerText = `${nearestHarmonicOrder}-shi`;
+      harmonicFreqText.innerText = `${harmonicFreq} Hz`;
     }
 
     function handleTrackpadMove(e) {
@@ -1109,7 +1109,7 @@
     decaySlider.addEventListener('input', (e) => {
       const d = parseFloat(e.target.value);
       engine.dampingTime = d;
-      decayValText.innerText = `${d.toFixed(1)} сек`;
+      decayValText.innerText = `${d.toFixed(1)} sek`;
     });
 
     window.addEventListener('keydown', (e) => {
