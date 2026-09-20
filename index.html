@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Шаңқобыз — Виртуалды Үн Жүйесі (Kazakh Shanqobyz Physical Simulator)</title>
+  <title>Shagnqobyz — Uin Zhuijesi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,24 +87,24 @@
         </div>
         <div>
           <h1 class="text-xl sm:text-2xl font-title tracking-wider text-amber-300 font-extrabold flex items-center gap-2">
-            ШАҢҚОБЫЗ <span class="text-xs px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-400/80 font-sans tracking-normal font-normal">WebAudio DSP</span>
+            SHAGNQOBYZ <span class="text-xs px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-400/80 font-sans tracking-normal font-normal">WebAudio DSP</span>
           </h1>
-          <p class="text-xs text-amber-200/50">Дәстүрлі қазақ шаңқобызының физикалық-акустикалық моделі</p>
+          <p class="text-xs text-amber-200/50">Daistuirli qazaq shagnqobyzynygn uilgisi</p>
         </div>
       </div>
 
       <!-- Quick status & Base Tone -->
       <div class="flex items-center gap-2 sm:gap-4">
         <div class="hidden sm:flex flex-col text-right">
-          <span class="text-[10px] uppercase tracking-widest text-amber-500/70">Негізгі көмей үні (Tone)</span>
-          <span id="currentNoteLabel" class="text-sm font-semibold text-amber-200 font-mono">D2 (73.4 Гц)</span>
+          <span class="text-[10px] uppercase tracking-widest text-amber-500/70">Negizgi kuoimej uini (Tone)</span>
+          <span id="currentNoteLabel" class="text-sm font-semibold text-amber-200 font-mono">D2 (73.4 Hz)</span>
         </div>
         <select id="baseNoteSelect" class="bg-amber-950/80 border border-amber-600/40 rounded-lg text-amber-200 text-xs px-3 py-1.5 focus:outline-none focus:border-amber-400 cursor-pointer">
-          <option value="55.0">A1 (55.0 Hz) - Қоңыр төмен</option>
-          <option value="65.4">C2 (65.4 Hz) - Терең көмей</option>
-          <option value="73.4" selected>D2 (73.4 Hz) - Классикалық</option>
-          <option value="82.4">E2 (82.4 Hz) - Жоғары жіңішке</option>
-          <option value="98.0">G2 (98.0 Hz) - Шымыр ашық</option>
+          <option value="55.0">A1 (55.0 Hz) - Qognyr tuoimen</option>
+          <option value="65.4">C2 (65.4 Hz) - Teregn kuoimej</option>
+          <option value="73.4" selected>D2 (73.4 Hz) - Qalypty</option>
+          <option value="82.4">E2 (82.4 Hz) - Zhoghary zhignishke</option>
+          <option value="98.0">G2 (98.0 Hz) - Shymyr ashyq</option>
         </select>
       </div>
     </div>
@@ -120,15 +120,15 @@
         <div class="absolute top-4 left-4 z-10 flex flex-col gap-1 pointer-events-none">
           <div class="flex items-center gap-2">
             <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span class="text-xs uppercase tracking-wider text-amber-300 font-semibold drop-shadow">Тілшені серпіңіз немесе түртіңіз</span>
+            <span class="text-xs uppercase tracking-wider text-amber-300 font-semibold drop-shadow">Tilsheni serpigniz nemese tuirtigniz</span>
           </div>
-          <span class="text-[11px] text-amber-400/60 drop-shadow">Тышқанмен/саусақпен тарту • Тыныс (Space)</span>
+          <span class="text-[11px] text-amber-400/60 drop-shadow">Tyshqanmen/sauusaqpen tartuu • Tynys (Space)</span>
         </div>
 
         <!-- Overtone harmonic indicator HUD inside Canvas container -->
         <div class="absolute top-4 right-4 z-10 text-right pointer-events-none">
           <div id="activeHarmonicBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-black/60 border border-amber-500/40 text-amber-300 inline-block backdrop-blur">
-            Обертон: <span id="harmonicNum" class="text-emerald-300 font-bold">8-ші</span> (<span id="harmonicFreqText">587 Гц</span>)
+            Oberton: <span id="harmonicNum" class="text-emerald-300 font-bold">8-shi</span> (<span id="harmonicFreqText">587 Hz</span>)
           </div>
         </div>
 
@@ -140,19 +140,19 @@
           <div class="flex items-center gap-2">
             <button id="pluckInBtn" class="btn-ornament px-3 py-2 rounded-lg text-amber-200 font-semibold flex items-center gap-1.5 shadow">
               <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-              <span>Ішке қағу (Pull)</span>
+              <span>Ishke qaghuu (Pull)</span>
               <kbd class="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-amber-600/30">↓</kbd>
             </button>
             <button id="pluckOutBtn" class="btn-ornament px-3 py-2 rounded-lg text-amber-200 font-semibold flex items-center gap-1.5 shadow">
               <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-              <span>Сыртқа қағу (Push)</span>
+              <span>Syrtqa qaghuu (Push)</span>
               <kbd class="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-amber-600/30">↑</kbd>
             </button>
           </div>
 
           <button id="droneToggleBtn" class="btn-ornament px-3.5 py-2 rounded-lg text-amber-300 flex items-center gap-2">
             <span id="droneLed" class="w-2 h-2 rounded-full bg-red-500/50"></span>
-            <span id="droneBtnText">Үздіксіз ырғақ (Drone)</span>
+            <span id="droneBtnText">Uizdiksiz yrghaq (Drone)</span>
           </button>
         </div>
       </div>
@@ -162,25 +162,25 @@
         <div class="flex items-center justify-between text-xs text-amber-300/80">
           <span class="font-semibold flex items-center gap-1.5">
             <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3.996 3.996 0 015.642 0 1 1 0 001.414-1.415 5.996 5.996 0 00-8.471 0 1 1 0 000 1.415z"/></svg>
-            Ауыз қуысын баптау (Mouth Cavity & Vowel Trackpad)
+            Auuyz quuysyn baptauu (Mouth Cavity & Vowel Trackpad)
           </span>
-          <span class="text-amber-400/60 font-mono text-[11px]">Көлденең: F2 (Тембр) • Тік: F1 (Көмей кеңдігі)</span>
+          <span class="text-amber-400/60 font-mono text-[11px]">Kuoildenegn: F2 (Tembr) • Tik: F1 (Kuoimej kegndigi)</span>
         </div>
         
         <div id="mouthTrackpad" class="relative w-full h-32 rounded-lg bg-gradient-to-br from-[#1a1510] to-[#0c0a08] border border-amber-700/30 overflow-hidden cursor-crosshair touch-none select-none flex items-center justify-center">
           <!-- Vowel Landmark points placed accurately on Formant space -->
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 15%; top: 75%;">Ұ [u]</div>
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 28%; top: 55%;">О [o]</div>
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 45%; top: 68%;">Ө [ø]</div>
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 50%; top: 20%;">А [a]</div>
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 70%; top: 40%;">Е [e]</div>
-          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 85%; top: 15%;">І [i]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 15%; top: 75%;">U [u]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 28%; top: 55%;">O [o]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 45%; top: 68%;">Uoi [ø]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 50%; top: 20%;">A [a]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 70%; top: 40%;">E [e]</div>
+          <div class="absolute text-xs font-serif font-bold text-amber-400/40 pointer-events-none" style="left: 85%; top: 15%;">I [i]</div>
 
           <div id="mouthCursor" class="absolute w-7 h-7 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-amber-300 bg-amber-500/30 backdrop-blur pointer-events-none flex items-center justify-center shadow-lg transition-[transform] duration-75">
             <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
           </div>
 
-          <span class="text-[11px] text-amber-300/30 pointer-events-none font-serif tracking-wider">Осы жерді саусақпен немесе тышқанмен сырғытыңыз</span>
+          <span class="text-[11px] text-amber-300/30 pointer-events-none font-serif tracking-wider">Osy zherdi sauusaqpen nemese tyshqanmen syrghytygnyz</span>
         </div>
       </div>
     </div>
@@ -193,7 +193,7 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-            Спектрлік резонанс (Harmonic Spectrum)
+            Airkelki terbelis (Harmonic Spectrum)
           </span>
           <span id="audioContextStatus" class="text-[10px] font-mono text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">Audio Ready</span>
         </div>
@@ -203,33 +203,33 @@
       <!-- Quick Kazakh Vowel Resonance Keys -->
       <div class="rounded-2xl bg-[#14100c] border border-amber-800/40 p-4 shadow-xl flex flex-col gap-3">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Қазақ көмей дауыстылары (Vowels)</span>
-          <span class="text-[10px] text-amber-500/70">Пернелер: [1] - [6]</span>
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Qazaq kuoimej dauuystylary (Vowels)</span>
+          <span class="text-[10px] text-amber-500/70">Perneler: [1] - [6]</span>
         </div>
 
         <div class="grid grid-cols-6 gap-1.5 sm:gap-2">
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="U">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Ұ</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">U</span>
             <span class="text-[10px] text-amber-400/50 font-mono">1</span>
           </button>
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="O">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">О</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">O</span>
             <span class="text-[10px] text-amber-400/50 font-mono">2</span>
           </button>
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="OE">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Ө</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Uoi</span>
             <span class="text-[10px] text-amber-400/50 font-mono">3</span>
           </button>
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="A">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">А</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">A</span>
             <span class="text-[10px] text-amber-400/50 font-mono">4</span>
           </button>
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="E">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">Е</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">E</span>
             <span class="text-[10px] text-amber-400/50 font-mono">5</span>
           </button>
           <button class="vowel-btn btn-ornament py-3 rounded-lg flex flex-col items-center justify-center group" data-vowel="I">
-            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">І</span>
+            <span class="text-lg font-title font-bold text-amber-200 group-hover:text-amber-100">I</span>
             <span class="text-[10px] text-amber-400/50 font-mono">6</span>
           </button>
         </div>
@@ -237,18 +237,18 @@
 
       <!-- Breath, Throat & Physical Dynamics Modulators -->
       <div class="rounded-2xl bg-[#14100c] border border-amber-800/40 p-4 shadow-xl flex flex-col gap-4">
-        <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Артикуляция мен көмей тынысы</span>
+        <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Airtuirlilik pen kuoimej tynysy</span>
         
         <!-- Breathing Spacebar Controller -->
         <div class="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-amber-900/30">
           <button id="breathBtn" class="flex-1 py-2.5 px-4 rounded-lg bg-gradient-to-r from-amber-950 to-amber-900 border border-amber-500/40 text-amber-200 font-semibold text-xs flex items-center justify-center gap-2 hover:border-amber-400 active:scale-[0.99] transition-transform">
             <svg class="w-4 h-4 text-cyan-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-            <span>Тыныс алу / шығару (Breath)</span>
+            <span>Tynys aluu / shygharuu (Breath)</span>
             <kbd class="text-[10px] bg-black/50 px-2 py-0.5 rounded text-amber-300 border border-amber-600/30 font-mono">Space</kbd>
           </button>
           
           <div class="flex flex-col items-center justify-center px-2">
-            <span class="text-[9px] uppercase tracking-wider text-amber-400/60">Көмей</span>
+            <span class="text-[9px] uppercase tracking-wider text-amber-400/60">Kuoimej</span>
             <span id="breathIntensity" class="text-xs font-bold text-amber-300 font-mono">0%</span>
           </div>
         </div>
@@ -257,24 +257,24 @@
         <div class="space-y-3 text-xs">
           <div>
             <div class="flex justify-between text-amber-200/80 mb-1">
-              <span>Тіл дірілі (Tongue Flutter / Tremolo)</span>
-              <span id="tremoloValText" class="font-mono text-amber-400">Өшірулі</span>
+              <span>Til dirili (Tongue Flutter / Tremolo)</span>
+              <span id="tremoloValText" class="font-mono text-amber-400">Uoishiruuli</span>
             </div>
             <input id="tremoloSlider" type="range" min="0" max="1" step="0.01" value="0" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
           </div>
 
           <div>
             <div class="flex justify-between text-amber-200/80 mb-1">
-              <span>Металл қаттылығы мен жаңғырық (Bite / Q)</span>
-              <span id="qValText" class="font-mono text-amber-400">Орташа (Q: 18)</span>
+              <span>Temir qattylyghy men zhagnghyryq (Bite / Q)</span>
+              <span id="qValText" class="font-mono text-amber-400">Ortasha (Q: 18)</span>
             </div>
             <input id="qSlider" type="range" min="6" max="32" step="1" value="18" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
           </div>
 
           <div>
             <div class="flex justify-between text-amber-200/80 mb-1">
-              <span>Тербелістің өшу уақыты (Decay Damping)</span>
-              <span id="decayValText" class="font-mono text-amber-400">3.2 сек</span>
+              <span>Terbelistign uoishuu uuaqyty (Decay Damping)</span>
+              <span id="decayValText" class="font-mono text-amber-400">3.2 sek</span>
             </div>
             <input id="decaySlider" type="range" min="1.0" max="6.0" step="0.1" value="3.2" class="w-full h-1.5 bg-amber-950 rounded-lg appearance-none cursor-pointer accent-amber-400">
           </div>
@@ -284,17 +284,17 @@
 
       <!-- Quick playing guide accordion -->
       <div class="rounded-xl border border-amber-900/30 bg-black/20 p-3 text-xs text-amber-200/70 space-y-1.5 leading-relaxed">
-        <p class="font-semibold text-amber-300">Қалай ойнайды?</p>
-        <p>1. <span class="text-amber-200 font-medium">Шерту:</span> Тілшені (тікенді) тышқанмен немесе саусақпен тартып жіберіңіз немесе <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Enter</kbd> / <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Space</kbd> басыңыз.</p>
-        <p>2. <span class="text-amber-200 font-medium">Әуен шығару:</span> Тілше дірілдеп тұрғанда <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">1-6</kbd> пернелерін басып немесе төмендегі ауыз шаршысында тышқанды қозғап дауысты дыбыстардың обертондарын айқындаңыз.</p>
-        <p>3. <span class="text-amber-200 font-medium">Тыныс алу:</span> Бос орын (Space) пернесін басып тұрғанда көмейден ауа тарту дыбысы қосылып, нағыз шамандық терең үн туады.</p>
+        <p class="font-semibold text-amber-300">Qalaj ojnajdy?</p>
+        <p>1. <span class="text-amber-200 font-medium">Shertuu:</span> Tilsheni (tikendi) tyshqanmen nemese sauusaqpen tartyp zhiberigniz nemese <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Enter</kbd> / <kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">Space</kbd> basygnyz.</p>
+        <p>2. <span class="text-amber-200 font-medium">Aiuuen shygharuu:</span> Tilshe dirildep turghanda<kbd class="px-1 bg-amber-950 border border-amber-600/30 rounded">1-6</kbd> pernelerin basyp nemese tuoimendegi auuyz sharshysynda tyshqandy qozghap dauuysty dybystardygn obertondaryn ajqyndagnyz.</p>
+        <p>3. <span class="text-amber-200 font-medium">Tynys aluu:</span> Bos oryn (Space) pernesin basyp turghanda kuoimejden auua tartuu dybysy qosylyp, naghyz shamandyq teregn uin tuuady.</p>
       </div>
 
     </div>
   </main>
 
   <footer class="w-full border-t border-amber-900/40 bg-black/50 py-3 px-4 text-center text-xs text-amber-200/40">
-    Қазақтың көне шаңқобыз аспабы • 100% Таза есептеуіш DSP синтезі (No Samples) • Web Audio API & HTML5 Canvas
+    Qazaqtygn kuoine shagnqobyz aspaby • 100% Taza esepteuuish DSP sintezi (No Samples) • Web Audio API & HTML5 Canvas
   </footer>
 
   <script>
@@ -587,12 +587,12 @@
 
     // Authentic formant maps for Kazakh vowels (F1: Throat openness, F2: Tongue front/back placement)
     const VOWEL_MAP = {
-      'U':  { f1: 320,  f2: 780,  name: 'Ұ [u]' },
-      'O':  { f1: 480,  f2: 950,  name: 'О [o]' },
-      'OE': { f1: 420,  f2: 1550, name: 'Ө [ø]' },
-      'A':  { f1: 750,  f2: 1250, name: 'А [a]' },
-      'E':  { f1: 520,  f2: 1900, name: 'Е [e]' },
-      'I':  { f1: 340,  f2: 2300, name: 'І [i]' }
+      'U':  { f1: 320,  f2: 780,  name: 'U [u]' },
+      'O':  { f1: 480,  f2: 950,  name: 'O [o]' },
+      'OE': { f1: 420,  f2: 1550, name: 'Uoi [ø]' },
+      'A':  { f1: 750,  f2: 1250, name: 'A [a]' },
+      'E':  { f1: 520,  f2: 1900, name: 'E [e]' },
+      'I':  { f1: 340,  f2: 2300, name: 'I [i]' }
     };
 
     const engine = new ShanqobyzAcousticEngine();
