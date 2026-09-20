@@ -600,7 +600,7 @@
     const canvas = document.getElementById('shanqobyzCanvas');
     const ctx2d = canvas.getContext('2d');
 
-    // Physical Spring for the Steel Reed (Тілше)
+    // Physical Spring for the Steel Reed (Tilshe)
     class ReedSpring {
       constructor() {
         this.displacement = 0;   // Current tip position offset
@@ -658,7 +658,7 @@
       ctx2d.shadowBlur = 24;
       ctx2d.shadowOffsetY = 12;
 
-      // 1. FORGED STEEL FRAME (Шанақ - horseshoe frame and long tapered tines)
+      // 1. FORGED STEEL FRAME (Shanaq - horseshoe frame and long tapered tines)
       // Traditional shape: circular ring handle transitioning into two parallel arms
       ctx2d.save();
       ctx2d.lineWidth = 14 * scale;
@@ -707,7 +707,7 @@
       ctx2d.fillText('◆  ҚАЗАҚ  ◆', cx - 72 * scale, cy + 4 * scale);
       ctx2d.restore();
 
-      // 2. FLEXIBLE STEEL REED (ТІЛШЕ) WITH MOTION BLUR VIBRATION
+      // 2. FLEXIBLE STEEL REED (TILSHE) WITH MOTION BLUR VIBRATION
       const vib = reed.displacement * scale;
       const speed = Math.abs(reed.velocity);
 
@@ -756,7 +756,7 @@
       );
       ctx2d.stroke();
 
-      // Reed Tip Elbow (Шүйде / Тілшенің қайырылған ұшы)
+      // Reed Tip Elbow (Shuijde / Tilshenign qajyrylghan ushy)
       // The bent right-angle elbow hook that players flick with fingers
       const tipX = cx + 185 * scale;
       const tipY = cy + vib;
@@ -1088,7 +1088,7 @@
       const val = parseFloat(e.target.value);
       engine.tremoloDepth = val;
       if (val === 0) {
-        tremoloValText.innerText = 'Өшірулі';
+        tremoloValText.innerText = 'Uoishiruuli';
       } else {
         tremoloValText.innerText = `${Math.round(val * 100)}% (${Math.round(engine.tremoloRate)} Гц)`;
       }
